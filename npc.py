@@ -7,7 +7,7 @@ class NPC:
         self.name = name
         self.messages: list[dict] = [
             {
-                "role": "user",
+                "role": "system",
                 "content": f"""
                 Your name is {self.name}. You are an NPC in a text adventure
                 game with the following backstory: {backstory}. 
@@ -24,15 +24,26 @@ class NPC:
             }
         )
 
-        response = chat(model=MODEL, messages=self.messages, stream=True)
-        print(f"\n{self.name}: ", end="")
-        for chunk in response:
-            print(chunk.message.content, end='', flush=True)
-        print()
+        response = chat(model=MODEL, messages=self.messages)
+        self.messages.append(
+            {
+                "role": "assistant",
+                "content": response.message.content,
+            }
+        )
+
+        print(f"\n{self.name}: {response.message.content}")
+
 
 
 fred: NPC = NPC("Fred", """
                         Your job is to insult the player and also 
                         pick them up specifically on any grammar mistakes.
                         The room you are in is the bathroom.
+                        """)
+
+mary: NPC = NPC("Mary", """
+                        You are a priest whose job it is to convert the player
+                        to you religion of goat worship. You are in the reception
+                        area.
                         """)

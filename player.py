@@ -20,7 +20,8 @@ class Player:
     
     def go(self, next_room: Room):
         """ Go to the next room """
-        pass
+        
+        self.room = next_room
 
 
     def take(self, item):
